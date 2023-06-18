@@ -1,10 +1,18 @@
-import { Post } from './Post'
 
+import './global.css'
+import { Post } from './Post'
+import styles from './App.module.css'
+import { Sidebar } from './components/Sidebar'
+import { Header } from './components/header'
 
 export function App() { 
   return (
-    <div>      
-      <Post 
+    <div>
+      <Header />
+      <div className={styles.wrapper}>
+        <Sidebar />
+        <main>
+        <Post 
         author="Wellington dos Santos Silva" 
         content="Lorem ipsum dolor sit amet 
                   consectetur adipisicing elit. 
@@ -20,6 +28,8 @@ export function App() {
         author="Gabriel Buzzi" 
         content="Um novo post!"
       />
+        </main>
+      </div>
     </div>
     
   )
