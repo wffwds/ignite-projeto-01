@@ -5,7 +5,7 @@ import { Avatar } from './Avatar'
 export function Comment(props) {
     return(
         <div className={styles.comment}>
-            <Avatar hasBorder={false} src={props.src}/>
+            <Avatar hasBorder={false} src="http://github.com/diego3g.png" />
             <div className={styles.commentBox}>
                 <div className={styles.commentContent}>
                     <header>
@@ -22,7 +22,7 @@ export function Comment(props) {
                 <footer>
                    <button>
                     <ThumbsUp />
-                    Aplaudir <span>20</span>                    
+                    Aplaudir <span>20</span>
                    </button>
                 </footer>
             </div>
