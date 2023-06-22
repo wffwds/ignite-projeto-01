@@ -10,11 +10,11 @@
 
 .content {
     line-height: 1.6;
-    color: var(--gray-300);    
+    color: var(--gray-300);
 }
 
 .content p {
-    margin-top: 1rem;    
+    margin-top: 1rem;
 }
 
 .content a {
@@ -87,7 +87,7 @@
     margin-top: 1rem;
 }
 
-.commentForm footer {    
+.commentForm footer {
     visibility: hidden;
     max-height: 0;
 }
@@ -110,8 +110,13 @@
     transition: background-color 0.1s;
 }
 
-.commentForm button[type=submit]:hover {
+.commentForm button[type=submit]not(:disabled):hover {
     background: var(--green-300);
+}
+
+.commentForm button[type=submit]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .commentList {

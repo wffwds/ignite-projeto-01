@@ -5,48 +5,64 @@ import { Comment } from './Comment'
 import styles from './Post.module.css'
 import { useState } from 'react'
 
-export function Post({ author, publishedAt, content }) {
+export function Post({ author, publishedAt, content, comment }) {
+    const [comments, setComments] = useState([''])
 
-    const [comments, setComments] = useState([
-        1,
-        2,
-    ])
+    const [newCommentText, setNewCommentText] = useState('')
 
     const publishedDateFormatted = format(publishedAt, "d 'de' LLLL' '-' HH:mm'h'", {
-        locale: ptBR,
+      locale: ptBR,
     })
 
     const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
-        locale: ptBR,
-        addSuffix: true,
+      locale: ptBR,
+      addSuffix: true,
     })
 
     function handleCreateNewComment(){
-        event.preventDefault()
-        setComments([...comments, comments.length + 1])
+      event.preventDefault()
+      setComments([...comments, newCommentText])
+      setNewCommentText('')
     }
 
+    function handleNewCommentChange() {
+      event.target.setCustomValidity('')
+      setNewCommentText(event.target.value)
+    }
+
+    function handleNewCommentInvalid(){
+      event.target.setCustomValidity('Esse campo é obrigatório!')
+    }
+
+    function deleteComment(commentToDelete){
+      const commentWithoutDeletedOne = comments.filter(comment => {
+        return comment != commentToDelete
+      })
+      setComments(commentWithoutDeletedOne)
+    }
+
+    const isNewCommentEmpty = newCommentText.length === 0;
     return (
         <article className={styles.post}>
            <header>
             <div className={styles.author}>
                 <Avatar src={author.avatarUrl} />
                 <div className={styles.authorInfo}>
-                    <strong>{author.name}</strong>
-                    <span>{author.role}</span>
+                  <strong>{author.name}</strong>
+                  <span>{author.role}</span>
                 </div>
             </div>
             <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
-                {publishedDateRelativeToNow}
+              {publishedDateRelativeToNow}
             </time>
 
            </header>
            <div className={styles.content}>
             {content.map(line => {
                 if (line.type === 'paragraph'){
-                    return <p>{line.content}</p>
+                  return <p key={line.content}>{line.content}</p>
                 }else if(line.type === 'link'){
-                    return <p><a href="#">{line.content}</a></p>
+                  return <p key={line.content}><a href="#">{line.content}</a></p>
                 }
             })}
            </div>
@@ -54,21 +70,31 @@ export function Post({ author, publishedAt, content }) {
             <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
                 <strong>Deixe seu feedback</strong>
                 <textarea
+                    name="comment"
+                    value={newCommentText}
                     placeholder="Deixe um comentário"
+                    onChange={handleNewCommentChange}
+                    onInvalid={handleNewCommentInvalid}
+                    required
                 />
                 <footer>
-                    <button type="submit">Publicar</button>
+                  <button type="submit" disabled={isNewCommentEmpty}>
+                    Publicar
+                  </button>
                 </footer>
             </form>
-            <div className={styles.commentList}>
-            {
+            <div className={styles.commentList}>{
                 comments.map(comment => {
-                    return <Comment />
+                    return (
+                        <Comment
+                          key={comment}
+                          content={comment}
+                          onDeleteComment={deleteComment}
+                        />
+                    )
                 })
             }
-
             </div>
         </article>
-
     )
 }
